@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+<meta charset="utf-8">
+<title>Frontend Quick Revision Notes</title>
+<style>
+  body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; font-size: 11pt; line-height: 1.5; color: #1e293b; margin: 30px; }
+  h1 { font-size: 20pt; color: #1e40af; border-bottom: 2px solid #3b82f6; padding-bottom: 6px; }
+  h2 { font-size: 14pt; color: #1d4ed8; margin-top: 20px; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; }
+  h3 { font-size: 12pt; color: #0f172a; margin-top: 14px; }
+  p, li { margin: 4px 0; }
+  .callout { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 10px 14px; margin: 12px 0; border-radius: 4px; }
+  .code { font-family: Consolas, 'Courier New', monospace; background: #f1f5f9; padding: 2px 6px; border-radius: 3px; font-size: 10pt; color: #0f172a; }
+  pre { background: #0f172a; color: #38bdf8; font-family: Consolas, monospace; padding: 12px; border-radius: 6px; font-size: 10pt; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  th, td { border: 1px solid #cbd5e1; padding: 8px 12px; text-align: left; }
+  th { background: #f8fafc; font-weight: bold; color: #1e293b; }
+</style>
+</head>
+<body>
+
+<h1>📖 Frontend Engineering Quick Revision Cheat-Sheet</h1>
+<div class="callout">
+  <strong>Last-Minute Interview Revision Guide:</strong> Core JavaScript Engine, Execution Context, Hoisting, TDZ, Closures, Array Methods, and Machine Coding Blueprints.
+</div>
+
+<h2>⚡ 1. Core JavaScript Engine & Execution Context</h2>
+<p><strong>Golden Rule:</strong> Everything in JavaScript runs inside an <em>Execution Context</em>.</p>
+<ul>
+  <li><strong>Phase 1: Memory Creation Phase (Scan Round):</strong> Variables (<span class="code">var</span>) get allocated memory with <span class="code">undefined</span>. Functions are allocated with their full body definition.</li>
+  <li><strong>Phase 2: Code Execution Phase (Action Round):</strong> Code executes line-by-line in the Thread of Execution.</li>
+</ul>
+
+<h2>⚡ 2. Hoisting, Scopes & Temporal Dead Zone (TDZ)</h2>
+<ul>
+  <li><span class="code">var</span> resides in the <strong>Global Scope</strong> (<span class="code">window.x = undefined</span>).</li>
+  <li><span class="code">let</span> and <span class="code">const</span> reside in a separate <strong>Script Scope</strong>. They are hoisted, but uninitialized.</li>
+  <li><strong>Temporal Dead Zone (TDZ):</strong> The time/window between a variable's memory hoisting and its actual line of declaration/initialization. Accessing inside TDZ throws an error.</li>
+</ul>
+
+<h3>⚠️ Top 4 Interview Errors Comparison</h3>
+<table>
+  <tr>
+    <th>Error Type</th>
+    <th>Exact Cause</th>
+    <th>Example Code</th>
+  </tr>
+  <tr>
+    <td><strong>ReferenceError: Cannot access 'y' before initialization</strong></td>
+    <td>Variable is hoisted in memory, but accessed while in <strong>TDZ</strong>.</td>
+    <td><span class="code">console.log(y); let y = 50;</span></td>
+  </tr>
+  <tr>
+    <td><strong>ReferenceError: x is not defined</strong></td>
+    <td>Variable is never declared anywhere in scope.</td>
+    <td><span class="code">console.log(x);</span></td>
+  </tr>
+  <tr>
+    <td><strong>SyntaxError: Identifier 'a' has already been declared</strong></td>
+    <td>Same variable declared twice using <span class="code">let</span> in same scope.</td>
+    <td><span class="code">let a = 10; let a = 20;</span></td>
+  </tr>
+  <tr>
+    <td><strong>TypeError: Assignment to constant variable</strong></td>
+    <td>Attempting to reassign a <span class="code">const</span> variable.</td>
+    <td><span class="code">const pi = 3.14; pi = 4;</span></td>
+  </tr>
+</table>
+
+<h2>⚡ 3. Lexical Environment & Closures</h2>
+<p><strong>Lexical:</strong> Physical placement in source code hierarchy.</p>
+<p><strong>Scope Chain:</strong> An inner function can access local variables + parent lexical variables + global variables.</p>
+<div class="callout">
+  <strong>Closure Definition:</strong> A function bundled together with references to its lexical environment. An inner function retains access to its parent variables even after the parent function has completed execution and left the call stack!
+</div>
+
+<pre>function createAdder(x) {
+  return function(y) {
+    return x + y; // x is remembered via closure!
+  };
+}
+const addFive = createAdder(5);
+console.log(addFive(3)); // Output: 8</pre>
+
+<h3>The Loop + setTimeout Trap</h3>
+<pre>for (var i = 1; i &lt;= 3; i++) {
+  setTimeout(() =&gt; console.log(i), i * 1000);
+}
+// Output: 4, 4, 4 (Kyunki var function/global scoped hai)
+// Solution: Use 'let' (har iteration me naya block scope banta hai)</pre>
+
+<h2>⚡ 4. Array Methods & reduce Deep Dive</h2>
+<ul>
+  <li><span class="code">map</span>: Transforms every element (output length == input length).</li>
+  <li><span class="code">filter</span>: Evaluates predicate (output length &lt;= input length).</li>
+  <li><span class="code">reduce</span>: Condenses array into a single accumulated value.</li>
+</ul>
+
+<h3>The Empty Array Trap</h3>
+<p>If no <span class="code">initialValue</span> is provided and the array is empty (<span class="code">[]</span>), JavaScript throws:
+<strong><span class="code">TypeError: Reduce of empty array with no initial value</span></strong>. Always pass initialValue!</p>
+
+<pre>const fruits = ['apple', 'banana', 'apple'];
+const counts = fruits.reduce((acc, f) =&gt; {
+  acc[f] = (acc[f] || 0) + 1;
+  return acc; // Always return accumulator!
+}, {});
+// Result: { apple: 2, banana: 1 }</pre>
+
+<h2>⚡ 5. Machine Coding: Star Rating Component</h2>
+<ul>
+  <li><strong>States:</strong> <span class="code">rating</span> (saved) & <span class="code">hoverRating</span> (preview).</li>
+  <li><strong>Formula:</strong> <span class="code">const isFilled = starValue &lt;= (hoverRating || rating);</span></li>
+  <li><strong>Accessibility:</strong> Attach <span class="code">role="button"</span>, <span class="code">tabIndex={0}</span>, and handle <span class="code">Enter</span>/<span class="code">Space</span> in <span class="code">onKeyDown</span>.</li>
+</ul>
+
+</body>
+</html>

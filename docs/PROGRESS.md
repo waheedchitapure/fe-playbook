@@ -14,7 +14,7 @@
 
 | Week | Focus Area | Status |
 |---|---|---|
-| **Week 1** | Core JS Polyfills + Execution Context + Basic UI Components (Star Rating, Timer) | 🟡 In Progress |
+| **Week 1** | Core JS (Execution Context, TDZ, Closures, Polyfills) + Basic UI Components (Star Rating, Timer) | 🟡 Active (Day 1-2) |
 | **Week 2** | Controlled Forms, Memoization (`useMemo`, `useCallback`), Todo & Accordion Labs | ⚪ Upcoming |
 | **Week 3** | Async Data Fetching, Autocomplete Search (Debounce + Caching), Infinite Scroll | ⚪ Upcoming |
 | **Week 4** | Recursive Tree (Nested Comments/File Explorer), Redux/Context & Mock Drills | ⚪ Upcoming |
@@ -23,18 +23,32 @@
 
 ## 📝 Completed Work & Current State
 
-### Milestone 1 (Day 1):
-- [x] **Project & Git Setup:** `fe-playbook` scaffolded with Vite React & GitHub sync established.
-- [x] **Theory Docs Created:**
-  - `docs/01-javascript-core/01-execution-context-and-closures.md` (Memory phase, TDZ, Closures, Loop tricky question)
-  - `docs/01-javascript-core/02-polyfills-guide.md` (myMap, myFilter, myReduce, debounce, throttle, flattenArray)
-- [x] **Machine Coding Labs Created:**
-  - `src/components/StarRating.jsx` (Hover preview, click save, keyboard accessibility)
-  - `docs/03-machine-coding-blueprints/01-star-rating-blueprint.md` (Detailed thinking steps)
+### ✅ Concept 1: Core JS Engine & Closures (COMPLETED & TESTED)
+- [x] **Execution Context:** 2 Phases (Memory Creation with `undefined` vs Code Execution).
+- [x] **DevTools Scope:** `Global` (var) vs `Script` (let/const).
+- [x] **Temporal Dead Zone (TDZ):** Window from hoisting to initialization. Verified learner understood `ReferenceError: Cannot access before initialization`.
+- [x] **Top 4 JS Errors:** `ReferenceError (TDZ)`, `ReferenceError (not defined)`, `SyntaxError (duplicate let)`, `TypeError (const reassign)`.
+- [x] **Lexical Scope & Scope Chain:** Child can access parent/global, but parent cannot access child.
+- [x] **Closures:** Function bundled with lexical environment (`createCounter`, `createAdder`, loop + `setTimeout` trap).
+
+### ✅ Concept 2: Array Methods & Polyfills (IN PROGRESS)
+- [x] `map`, `filter`, `reduce` differences.
+- [x] `reduce` under the hood: Accumulator, Current, Initial Value.
+- [x] The Empty Array Trap (`TypeError: Reduce of empty array with no initial value`).
+- [x] Frequency counter problem solved.
+
+### ✅ Machine Coding Labs
+- [x] **Star Rating Component:** Hover preview formula `isFilled = starValue <= (hoverRating || rating)`, keyboard accessibility (`Enter`/`Space`).
+  - Code: `src/components/StarRating.jsx`
+  - Blueprint: `docs/03-machine-coding-blueprints/01-star-rating-blueprint.md`
+
+### 📄 Revision Materials Created:
+- `docs/QUICK_REVISION_NOTES.md` (Markdown format for GitHub / phone)
+- `docs/QUICK_REVISION_NOTES.doc` (Microsoft Word format with tables & callouts)
 
 ---
 
 ## 🎯 Next Immediate Action
-1. Review & understand `Array.prototype.myFilter` and `Array.prototype.myReduce` polyfills.
-2. Build / test custom Countdown Timer / Stopwatch machine coding component.
-3. Revise React Questions 1 to 10 from NamasteDev guide (React Element vs Component, JSX, Keys, Controlled Components).
+1. Review learner's answer on `createAdder(5)(3)` closure problem.
+2. Hands-on coding of `myFilter` & `myReduce` polyfills.
+3. Machine Coding Lab 2: **Countdown Timer / Stopwatch (Start, Pause, Reset)**.
