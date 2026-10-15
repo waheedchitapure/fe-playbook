@@ -36,7 +36,7 @@
   > *"A function bundled together with references to its lexical environment forms a Closure."*
   > Inner function apne parent function ke variables ko yaad rakhta hai, chahe parent function call stack se destroy (return) kyu na ho chuka ho!
 
-### The Loop + `setTimeout` Trap
+### 🛑 The Loop + `setTimeout` Trap
 ```javascript
 for (var i = 1; i <= 3; i++) {
   setTimeout(() => console.log(i), i * 1000);
@@ -44,6 +44,15 @@ for (var i = 1; i <= 3; i++) {
 // Output: 4, 4, 4 (kyunki var globally/function shared hai)
 // Solution 1: Use 'let' (har loop me naya block scope banta hai)
 // Solution 2: Use Closure/IIFE: ((currentI) => setTimeout(...))(i)
+```
+
+### 🛑 The Stale Closure in Timers Trap
+```javascript
+// Galat: timer ke callback ne purana count=0 closure me pack kar liya
+setInterval(() => setCount(count + 1), 1000); // Freezes at 1!
+
+// Sahi (Functional update):
+setInterval(() => setCount(prev => prev + 1), 1000); // Hamesha latest value!
 ```
 
 ---

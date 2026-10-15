@@ -30,17 +30,21 @@
 - [x] **Top 4 JS Errors:** `ReferenceError (TDZ)`, `ReferenceError (not defined)`, `SyntaxError (duplicate let)`, `TypeError (const reassign)`.
 - [x] **Lexical Scope & Scope Chain:** Hierarchy, Grandparent-Parent-Child analogy.
 - [x] **Closures:** Function bundled with lexical environment (`createCounter`, `createAdder`, loop + `setTimeout` trap).
+- [x] **Stale Closure in Timers:** `setInterval` capturing old state vs Functional updates (`prev => prev + 1`).
 
-### ✅ Concept 2: Array Methods & Polyfills (IN PROGRESS)
+### ✅ Concept 2: Array Methods & Polyfills
 - [x] `map`, `filter`, `reduce` differences.
 - [x] `reduce` under the hood: Accumulator, Current, Initial Value.
 - [x] The Empty Array Trap (`TypeError: Reduce of empty array with no initial value`).
 - [x] Frequency counter problem solved.
 
 ### ✅ Machine Coding Labs
-- [x] **Star Rating Component:** Hover preview formula `isFilled = starValue <= (hoverRating || rating)`, keyboard accessibility (`Enter`/`Space`).
+- [x] **Lab 1: Star Rating Component:** Hover preview formula `isFilled = starValue <= (hoverRating || rating)`, keyboard accessibility (`Enter`/`Space`).
   - Code: `src/components/StarRating.jsx`
   - Blueprint: `docs/03-machine-coding-blueprints/01-star-rating-blueprint.md`
+- [x] **Lab 2: Stopwatch / Timer Component:** Start/Pause toggle, Reset, zero memory leaks (clearInterval on unmount), and functional state updates preventing stale closures.
+  - Code: `src/components/Stopwatch.jsx`
+  - Blueprint: `docs/03-machine-coding-blueprints/02-stopwatch-blueprint.md`
 
 ### 📄 Separate Master Revision Documents Created:
 1. **JavaScript Core & Polyfills:**
@@ -53,6 +57,6 @@
 ---
 
 ## 🎯 Next Immediate Action
-1. Review learner's answer on `createAdder(5)(3)` closure problem.
+1. Review learner's answer on Reset button state requirements.
 2. Coding custom `myFilter` and `myReduce` polyfills in playground.
-3. Machine Coding Lab 2: **Countdown Timer / Stopwatch (Start, Pause, Reset)**.
+3. Machine Coding Lab 3: **Todo App with Filter (Controlled Inputs & Array Immutability)**.
