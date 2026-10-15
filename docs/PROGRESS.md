@@ -26,9 +26,9 @@
 ### ✅ Concept 1: Core JS Engine & Closures (COMPLETED & TESTED)
 - [x] **Execution Context:** 2 Phases (Memory Creation with `undefined` vs Code Execution).
 - [x] **DevTools Scope:** `Global` (var) vs `Script` (let/const).
-- [x] **Temporal Dead Zone (TDZ):** Window from hoisting to initialization. Verified learner understood `ReferenceError: Cannot access before initialization`.
+- [x] **Temporal Dead Zone (TDZ):** Window from hoisting to initialization. Learner answered `ReferenceError: Cannot access before initialization`.
 - [x] **Top 4 JS Errors:** `ReferenceError (TDZ)`, `ReferenceError (not defined)`, `SyntaxError (duplicate let)`, `TypeError (const reassign)`.
-- [x] **Lexical Scope & Scope Chain:** Child can access parent/global, but parent cannot access child.
+- [x] **Lexical Scope & Scope Chain:** Hierarchy, Grandparent-Parent-Child analogy.
 - [x] **Closures:** Function bundled with lexical environment (`createCounter`, `createAdder`, loop + `setTimeout` trap).
 
 ### ✅ Concept 2: Array Methods & Polyfills (IN PROGRESS)
@@ -42,13 +42,17 @@
   - Code: `src/components/StarRating.jsx`
   - Blueprint: `docs/03-machine-coding-blueprints/01-star-rating-blueprint.md`
 
-### 📄 Revision Materials Created:
-- `docs/QUICK_REVISION_NOTES.md` (Markdown format for GitHub / phone)
-- `docs/QUICK_REVISION_NOTES.doc` (Microsoft Word format with tables & callouts)
+### 📄 Separate Master Revision Documents Created:
+1. **JavaScript Core & Polyfills:**
+   - Word Doc: `docs/01-JAVASCRIPT_REVISION.doc`
+   - Markdown: `docs/01-JAVASCRIPT_REVISION.md`
+2. **React.js Architecture & Components:**
+   - Word Doc: `docs/02-REACT_REVISION.doc`
+   - Markdown: `docs/02-REACT_REVISION.md`
 
 ---
 
 ## 🎯 Next Immediate Action
 1. Review learner's answer on `createAdder(5)(3)` closure problem.
-2. Hands-on coding of `myFilter` & `myReduce` polyfills.
+2. Coding custom `myFilter` and `myReduce` polyfills in playground.
 3. Machine Coding Lab 2: **Countdown Timer / Stopwatch (Start, Pause, Reset)**.
