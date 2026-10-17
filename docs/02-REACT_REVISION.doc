@@ -21,7 +21,7 @@
 
 <h1>⚛️ React.js Core Concepts & Machine Coding - Revision Notes</h1>
 <div class="callout">
-  <strong>Part 2 Master Revision Guide:</strong> React Elements, Components, JSX, State vs Props, Key prop, Controlled/Uncontrolled Forms, Data Fetching Lifecycle, and Shimmer UI.
+  <strong>Part 2 Master Revision Guide:</strong> React Elements, Components, JSX, State vs Props, Key prop, Controlled/Uncontrolled Forms, The 2-List Pattern, Data Fetching, and Shimmer UI.
 </div>
 
 <h2>1. React Core Constructs</h2>
@@ -68,10 +68,11 @@
   <li><strong>Why Array Index as Key is Bad:</strong> Reordering or deleting list items causes index mismatch, leading to unnecessary re-renders and wrong UI state bugs in inputs. Use unique IDs!</li>
 </ul>
 
-<h2>4. Controlled vs Uncontrolled Components</h2>
+<h2>4. Controlled Components & Search Filters</h2>
 <ul>
-  <li><strong>Controlled:</strong> Input value is managed by React state (<span class="code">value={state}</span> + <span class="code">onChange</span>). Single source of truth.</li>
-  <li><strong>Uncontrolled:</strong> Input value is stored directly in the DOM. Accessed using <span class="code">useRef</span> on submission.</li>
+  <li><strong>Controlled Component:</strong> Input value is bound to React state (<span class="code">value={state}</span> + <span class="code">onChange</span>). Single source of truth.</li>
+  <li><strong>The Input Freeze Trap:</strong> If <span class="code">value={text}</span> is provided without <span class="code">onChange</span>, typing is blocked and input freezes.</li>
+  <li><strong>The 2-List Pattern:</strong> Keep two states in search filters: <span class="code">allRestaurants</span> (master copy, never mutated) and <span class="code">filteredRestaurants</span> (display copy).</li>
 </ul>
 
 <h2>5. Asynchronous Data Fetching & Shimmer UI (The 4-Step Pattern)</h2>
@@ -84,12 +85,6 @@
     <li><strong>Render Order:</strong> Check error first (<span class="code">if (error) return &lt;Error /&gt;</span>), then loading (<span class="code">if (isLoading) return &lt;Shimmer /&gt;</span>), then actual UI.</li>
   </ol>
 </div>
-
-<pre>fetch('/api/restaurants')
-  .then(res => res.json())
-  .then(data => setRestaurants(data))
-  .catch(err => setError(err.message))
-  .finally(() => setIsLoading(false)); // Always turns off loading!</pre>
 
 <h2>6. Machine Coding: Star Rating Component</h2>
 <ul>

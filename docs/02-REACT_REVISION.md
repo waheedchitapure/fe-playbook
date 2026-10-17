@@ -56,16 +56,26 @@
 
 ---
 
-## 4. Controlled vs Uncontrolled Components (PDF Q7)
+## 4. Controlled Components & Search Filter Patterns (PDF Q7, Q43)
 
-* **Controlled Component:** Input ki value **React State** se bandhi hoti hai (`value={state}` + `onChange`). React state is the **single source of truth**. (Best for validation).
-* **Uncontrolled Component:** Input ki value **DOM** khud handle karta hai. React sirf `useRef` se jarurat padne par read karta hai. (Best for simple forms / third party libraries).
+### Controlled vs Uncontrolled
+* **Controlled Component:** Input ki value **React State** se bandhi hoti hai (`value={state}` + `onChange`). React is the **Single Source of Truth**.
+* **Uncontrolled Component:** Input value ko direct **DOM** sambhalta hai (`useRef` se read kiya jata hai).
+
+### 🛑 The Input Freeze Trap
+* Agar `<input value={text} />` me `onChange` nahi lagaya, toh input **freeze** ho jayega! User chahe kitna bhi type kare, text change nahi hoga kyunki state update karne wala koi nahi hai.
+
+### 🛡️ The 2-List Pattern in Search Filters (Namaste React Pattern)
+* Kabhi bhi original array ko directly filter karke overwrite mat karo (warna backspace dabane par purana data kho jayega).
+* Hamesha **2 States** rakho:
+  1. `allRestaurants`: Master Copy (Original API data, kabhi mutate nahi hota).
+  2. `filteredRestaurants`: Display Copy (Screen par render hone wali list).
 
 ---
 
-## 5. Asynchronous Data Fetching & Conditional Rendering (PDF Q36 & Q40)
+## 5. Asynchronous Data Fetching & Shimmer UI (PDF Q36 & Q40)
 
-### 4-Step Master Formula (Kabhi Mat Bhoolna):
+### 4-Step Master Formula:
 1. **Teen States:** `data` (`[]`), `isLoading` (`true`), `error` (`null`).
 2. **`useEffect` with `[]`:** Sirf initial render par 1 baar call hoga.
 3. **Handle Promises with `.finally()`:**
@@ -87,7 +97,7 @@
 
 ---
 
-## 6. Machine Coding Pattern: Star Rating Component
+## 6. Machine Coding: Star Rating Component
 
 ### Requirements & Props
 * Props: `totalStars` (default 5), `onRate(value)` callback.
