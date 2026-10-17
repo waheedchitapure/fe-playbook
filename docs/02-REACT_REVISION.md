@@ -1,6 +1,6 @@
 # ⚛️ React.js Core & Machine Coding - Revision Notes
 
-> **Target:** Namaste React Foundations, Architecture, Component Patterns & Interview Traps (PDF Q1 - Q15).
+> **Target:** Namaste React Foundations, Architecture, Component Patterns & Interview Traps (PDF Q1 - Q15, Q36, Q40).
 
 ---
 
@@ -63,7 +63,31 @@
 
 ---
 
-## 5. Machine Coding Pattern: Star Rating Component
+## 5. Asynchronous Data Fetching & Conditional Rendering (PDF Q36 & Q40)
+
+### 4-Step Master Formula (Kabhi Mat Bhoolna):
+1. **Teen States:** `data` (`[]`), `isLoading` (`true`), `error` (`null`).
+2. **`useEffect` with `[]`:** Sirf initial render par 1 baar call hoga.
+3. **Handle Promises with `.finally()`:**
+   ```javascript
+   fetch('/api/cards')
+     .then(res => res.json())
+     .then(data => setCards(data))
+     .catch(err => setError(err.message))
+     .finally(() => setIsLoading(false)); // 👈 Hamesha loading false karega!
+   ```
+4. **Conditional Rendering Order:**
+   * Pehle `error` check karo (`if (error) return <Error />`)
+   * Fir `isLoading` check karo (`if (isLoading) return <Shimmer />`)
+   * Fir Asli UI render karo.
+
+### Shimmer UI vs Spinner
+* Spinner (🔄) poor UX deta hai.
+* **Shimmer UI (Skeleton)** real cards ka placeholder shape dikhata hai, jisse perceived speed 10x behtar lagti hai.
+
+---
+
+## 6. Machine Coding Pattern: Star Rating Component
 
 ### Requirements & Props
 * Props: `totalStars` (default 5), `onRate(value)` callback.

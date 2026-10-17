@@ -21,7 +21,7 @@
 
 <h1>⚛️ React.js Core Concepts & Machine Coding - Revision Notes</h1>
 <div class="callout">
-  <strong>Part 2 Master Revision Guide:</strong> React Elements, Components, JSX Transpilation, State vs Props, Key prop, Reconciliation, Controlled/Uncontrolled Forms, and UI Blueprints.
+  <strong>Part 2 Master Revision Guide:</strong> React Elements, Components, JSX, State vs Props, Key prop, Controlled/Uncontrolled Forms, Data Fetching Lifecycle, and Shimmer UI.
 </div>
 
 <h2>1. React Core Constructs</h2>
@@ -74,7 +74,24 @@
   <li><strong>Uncontrolled:</strong> Input value is stored directly in the DOM. Accessed using <span class="code">useRef</span> on submission.</li>
 </ul>
 
-<h2>5. Machine Coding: Star Rating Component</h2>
+<h2>5. Asynchronous Data Fetching & Shimmer UI (The 4-Step Pattern)</h2>
+<div class="callout">
+  <strong>The 4-Step Mental Formula:</strong>
+  <ol>
+    <li><strong>3 States:</strong> <span class="code">data ([])</span>, <span class="code">isLoading (true)</span>, <span class="code">error (null)</span>.</li>
+    <li><strong>useEffect:</strong> Trigger fetch inside <span class="code">useEffect(..., [])</span>.</li>
+    <li><strong>Promise handling with .finally():</strong> Always set <span class="code">setIsLoading(false)</span> in <span class="code">.finally()</span> so it runs regardless of success or failure.</li>
+    <li><strong>Render Order:</strong> Check error first (<span class="code">if (error) return &lt;Error /&gt;</span>), then loading (<span class="code">if (isLoading) return &lt;Shimmer /&gt;</span>), then actual UI.</li>
+  </ol>
+</div>
+
+<pre>fetch('/api/restaurants')
+  .then(res => res.json())
+  .then(data => setRestaurants(data))
+  .catch(err => setError(err.message))
+  .finally(() => setIsLoading(false)); // Always turns off loading!</pre>
+
+<h2>6. Machine Coding: Star Rating Component</h2>
 <ul>
   <li><strong>States:</strong> <span class="code">rating</span> (saved) & <span class="code">hoverRating</span> (preview).</li>
   <li><strong>Formula:</strong> <span class="code">const isFilled = starValue &lt;= (hoverRating || rating);</span></li>
