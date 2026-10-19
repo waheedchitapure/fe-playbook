@@ -14,7 +14,7 @@
 
 | Week | Focus Area | Status |
 |---|---|---|
-| **Week 1** | Core JS (Execution Context, TDZ, Closures, Polyfills) + Basic UI Components (Star Rating, Timer) | 🟡 Active (Day 1-2) |
+| **Week 1** | Core JS (Execution Context, TDZ, Closures, Debounce) + Basic UI Components (Star Rating, Timer, Search Filter) | 🟡 Active (Day 1-3) |
 | **Week 2** | Controlled Forms, Memoization (`useMemo`, `useCallback`), Todo & Accordion Labs | ⚪ Upcoming |
 | **Week 3** | Async Data Fetching, Autocomplete Search (Debounce + Caching), Infinite Scroll | ⚪ Upcoming |
 | **Week 4** | Recursive Tree (Nested Comments/File Explorer), Redux/Context & Mock Drills | ⚪ Upcoming |
@@ -26,11 +26,12 @@
 ### ✅ Concept 1: Core JS Engine & Closures (COMPLETED & TESTED)
 - [x] **Execution Context:** 2 Phases (Memory Creation with `undefined` vs Code Execution).
 - [x] **DevTools Scope:** `Global` (var) vs `Script` (let/const).
-- [x] **Temporal Dead Zone (TDZ):** Window from hoisting to initialization. Learner answered `ReferenceError: Cannot access before initialization`.
+- [x] **Temporal Dead Zone (TDZ):** Window from hoisting to initialization.
 - [x] **Top 4 JS Errors:** `ReferenceError (TDZ)`, `ReferenceError (not defined)`, `SyntaxError (duplicate let)`, `TypeError (const reassign)`.
 - [x] **Lexical Scope & Scope Chain:** Hierarchy, Grandparent-Parent-Child analogy.
 - [x] **Closures:** Function bundled with lexical environment (`createCounter`, `createAdder`, loop + `setTimeout` trap).
 - [x] **Stale Closure in Timers:** `setInterval` capturing old state vs Functional updates (`prev => prev + 1`).
+- [x] **Debouncing Concept & Implementation:** Lift analogy, timer cancellation with `clearTimeout`, closure variables.
 
 ### ✅ Concept 2: Array Methods & Polyfills
 - [x] `map`, `filter`, `reduce` differences.
@@ -38,11 +39,21 @@
 - [x] The Empty Array Trap (`TypeError: Reduce of empty array with no initial value`).
 - [x] Frequency counter problem solved.
 
+### ✅ Concept 3: React Architecture & Component Patterns
+- [x] **Controlled Components:** `value={state}` + `onChange`, why omitting `onChange` causes freeze.
+- [x] **The 2-List Pattern in Search Filters:** Master Copy (`allRestaurants`) vs Display Copy (`filteredRestaurants`).
+- [x] **Asynchronous Data Fetching & Shimmer UI:** 4-step formula (`data`, `isLoading`, `error`), `.finally()` pattern.
+- [x] **4-Guard Production Search Architecture:**
+  1. Debounce (typing control)
+  2. Min-length guard (`length >= 3`)
+  3. Search Caching (`cache[query]`)
+  4. Race Condition & `AbortController` (`signal`, cleanup `controller.abort()`)
+
 ### ✅ Machine Coding Labs
 - [x] **Lab 1: Star Rating Component:** Hover preview formula `isFilled = starValue <= (hoverRating || rating)`, keyboard accessibility (`Enter`/`Space`).
   - Code: `src/components/StarRating.jsx`
   - Blueprint: `docs/03-machine-coding-blueprints/01-star-rating-blueprint.md`
-- [x] **Lab 2: Stopwatch / Timer Component:** Start/Pause toggle, Reset, zero memory leaks (clearInterval on unmount), and functional state updates preventing stale closures.
+- [x] **Lab 2: Stopwatch / Timer Component:** Start/Pause toggle, Reset, zero memory leaks (clearInterval on unmount), and functional state updates.
   - Code: `src/components/Stopwatch.jsx`
   - Blueprint: `docs/03-machine-coding-blueprints/02-stopwatch-blueprint.md`
 
@@ -57,6 +68,5 @@
 ---
 
 ## 🎯 Next Immediate Action
-1. Review learner's answer on Reset button state requirements.
-2. Coding custom `myFilter` and `myReduce` polyfills in playground.
-3. Machine Coding Lab 3: **Todo App with Filter (Controlled Inputs & Array Immutability)**.
+1. Machine Coding Lab 3: **Live Search Bar with Debounce & Caching Component**.
+2. React Core Question: `useEffect` vs `useLayoutEffect` (PDF Q11).

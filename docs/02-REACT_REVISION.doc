@@ -21,7 +21,7 @@
 
 <h1>⚛️ React.js Core Concepts & Machine Coding - Revision Notes</h1>
 <div class="callout">
-  <strong>Part 2 Master Revision Guide:</strong> React Elements, Components, JSX, State vs Props, Key prop, Controlled/Uncontrolled Forms, The 2-List Pattern, Data Fetching, and Shimmer UI.
+  <strong>Part 2 Master Revision Guide:</strong> React Elements, Components, JSX, State vs Props, Key prop, Controlled Forms, The 4-Guard Search Architecture, Data Fetching, and Shimmer UI.
 </div>
 
 <h2>1. React Core Constructs</h2>
@@ -58,10 +58,6 @@
   </tr>
 </table>
 
-<div class="callout">
-  <strong>Immutability Golden Rule:</strong> Never mutate state directly (e.g., <span class="code">arr.push()</span>). Always create a new copy (<span class="code">[...arr, newItem]</span>) so React's shallow comparison detects reference change and re-renders properly!
-</div>
-
 <h2>3. Lists & The Key Prop</h2>
 <ul>
   <li><strong>Purpose:</strong> Keys help React's <em>Reconciliation (Diffing Algorithm)</em> uniquely identify which list elements changed, were added, or were removed.</li>
@@ -75,18 +71,39 @@
   <li><strong>The 2-List Pattern:</strong> Keep two states in search filters: <span class="code">allRestaurants</span> (master copy, never mutated) and <span class="code">filteredRestaurants</span> (display copy).</li>
 </ul>
 
-<h2>5. Asynchronous Data Fetching & Shimmer UI (The 4-Step Pattern)</h2>
+<h2>5. Production Search Bar: The 4-Guard Architecture</h2>
+<div class="callout">
+  <strong>Key Production Considerations:</strong>
+  <ol>
+    <li><strong>Debouncing:</strong> Waits for a pause (300ms) to throttle rapid typing bursts.</li>
+    <li><strong>Min-Length Guard:</strong> Only query when <span class="code">searchText.length &gt;= 3</span>.</li>
+    <li><strong>Search Caching:</strong> Cache results in an in-memory object so repeat searches execute in 0ms without network overhead.</li>
+    <li><strong>AbortController (Race Condition Prevention):</strong> Cancel stale in-flight requests when a new search string is typed.</li>
+  </ol>
+</div>
+
+<pre>useEffect(() => {
+  const controller = new AbortController();
+
+  fetch(`/api/search?q=${searchText}`, { signal: controller.signal })
+    .then(res => res.json())
+    .then(data => setResults(data));
+
+  return () => controller.abort(); // Cleanup cancels pending request!
+}, [searchText]);</pre>
+
+<h2>6. Asynchronous Data Fetching & Shimmer UI</h2>
 <div class="callout">
   <strong>The 4-Step Mental Formula:</strong>
   <ol>
     <li><strong>3 States:</strong> <span class="code">data ([])</span>, <span class="code">isLoading (true)</span>, <span class="code">error (null)</span>.</li>
     <li><strong>useEffect:</strong> Trigger fetch inside <span class="code">useEffect(..., [])</span>.</li>
-    <li><strong>Promise handling with .finally():</strong> Always set <span class="code">setIsLoading(false)</span> in <span class="code">.finally()</span> so it runs regardless of success or failure.</li>
+    <li><strong>Promise handling with .finally():</strong> Always set <span class="code">setIsLoading(false)</span> in <span class="code">.finally()</span>.</li>
     <li><strong>Render Order:</strong> Check error first (<span class="code">if (error) return &lt;Error /&gt;</span>), then loading (<span class="code">if (isLoading) return &lt;Shimmer /&gt;</span>), then actual UI.</li>
   </ol>
 </div>
 
-<h2>6. Machine Coding: Star Rating Component</h2>
+<h2>7. Machine Coding: Star Rating Component</h2>
 <ul>
   <li><strong>States:</strong> <span class="code">rating</span> (saved) & <span class="code">hoverRating</span> (preview).</li>
   <li><strong>Formula:</strong> <span class="code">const isFilled = starValue &lt;= (hoverRating || rating);</span></li>

@@ -56,24 +56,53 @@
 
 ---
 
-## 4. Controlled Components & Search Filter Patterns (PDF Q7, Q43)
+## 4. Controlled Components & Search Filters (PDF Q7, Q43)
 
 ### Controlled vs Uncontrolled
 * **Controlled Component:** Input ki value **React State** se bandhi hoti hai (`value={state}` + `onChange`). React is the **Single Source of Truth**.
 * **Uncontrolled Component:** Input value ko direct **DOM** sambhalta hai (`useRef` se read kiya jata hai).
 
 ### 🛑 The Input Freeze Trap
-* Agar `<input value={text} />` me `onChange` nahi lagaya, toh input **freeze** ho jayega! User chahe kitna bhi type kare, text change nahi hoga kyunki state update karne wala koi nahi hai.
+* Agar `<input value={text} />` me `onChange` nahi lagaya, toh input **freeze** ho jayega! User chahe kitna bhi type kare, text change nahi hoga.
 
 ### 🛡️ The 2-List Pattern in Search Filters (Namaste React Pattern)
-* Kabhi bhi original array ko directly filter karke overwrite mat karo (warna backspace dabane par purana data kho jayega).
 * Hamesha **2 States** rakho:
   1. `allRestaurants`: Master Copy (Original API data, kabhi mutate nahi hota).
   2. `filteredRestaurants`: Display Copy (Screen par render hone wali list).
 
 ---
 
-## 5. Asynchronous Data Fetching & Shimmer UI (PDF Q36 & Q40)
+## 5. Production Search Bar: The 4-Guard Architecture
+
+Jab interviewer puche ki *"Search Bar ko production level par scale kaise karoge?"*, toh yeh 4 points bolo:
+
+1. **Debouncing:** Fast typing bursts ko rokta hai (user ke 300ms rukne par hi call).
+2. **Minimum Length Guard:**
+   ```javascript
+   if (searchText.trim().length < 3) return; // 1-2 letters par API call block
+   ```
+3. **Search Caching (Memory Hashmap):**
+   ```javascript
+   const cache = { "pizza": [...results] };
+   // Agar word cache me hai, toh 0ms me screen par dikhao, no API call!
+   ```
+4. **Race Condition Prevention with `AbortController` (PDF Q40):**
+   ```javascript
+   useEffect(() => {
+     const controller = new AbortController();
+
+     fetch(`/api/search?q=${searchText}`, { signal: controller.signal })
+       .then(res => res.json())
+       .then(data => setResults(data));
+
+     // 🧹 Naya letter type hone par pichhli pending request cancel:
+     return () => controller.abort();
+   }, [searchText]);
+   ```
+
+---
+
+## 6. Asynchronous Data Fetching & Shimmer UI (PDF Q36 & Q40)
 
 ### 4-Step Master Formula:
 1. **Teen States:** `data` (`[]`), `isLoading` (`true`), `error` (`null`).
@@ -91,13 +120,9 @@
    * Fir `isLoading` check karo (`if (isLoading) return <Shimmer />`)
    * Fir Asli UI render karo.
 
-### Shimmer UI vs Spinner
-* Spinner (🔄) poor UX deta hai.
-* **Shimmer UI (Skeleton)** real cards ka placeholder shape dikhata hai, jisse perceived speed 10x behtar lagti hai.
-
 ---
 
-## 6. Machine Coding: Star Rating Component
+## 7. Machine Coding: Star Rating Component
 
 ### Requirements & Props
 * Props: `totalStars` (default 5), `onRate(value)` callback.

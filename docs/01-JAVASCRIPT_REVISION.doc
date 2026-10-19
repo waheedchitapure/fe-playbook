@@ -21,7 +21,7 @@
 
 <h1>⚡ JavaScript Core Engine & Polyfills - Revision Notes</h1>
 <div class="callout">
-  <strong>Part 1 Master Revision Guide:</strong> Execution Context, Hoisting, TDZ, Top 4 Errors, Lexical Scope, Closures, Stale Closures in Timers, and Array Polyfills.
+  <strong>Part 1 Master Revision Guide:</strong> Execution Context, Hoisting, TDZ, Top 4 Errors, Lexical Scope, Closures, Debouncing, and Array Polyfills.
 </div>
 
 <h2>1. Execution Context (2 Phases)</h2>
@@ -88,7 +88,21 @@ setInterval(() =&gt; setCount(count + 1), 1000); // Freezes at 1!
 // ✅ Correct (Functional Update):
 setInterval(() =&gt; setCount(prev =&gt; prev + 1), 1000); // Always uses latest value!</pre>
 
-<h2>4. Array Methods & reduce Deep Dive</h2>
+<h2>4. Debouncing (Performance Optimization)</h2>
+<p><strong>Definition:</strong> Delays function execution until user pauses typing for a specified duration (e.g., 300ms).</p>
+<pre>function debounce(fn, delay = 300) {
+  let timerId = null;
+
+  return function (...args) {
+    if (timerId) clearTimeout(timerId); // Kill previous scheduled timer
+
+    timerId = setTimeout(() => {
+      fn(...args);
+    }, delay);
+  };
+}</pre>
+
+<h2>5. Array Methods & reduce Deep Dive</h2>
 <ul>
   <li><span class="code">map</span>: Transforms every element (output length == input length).</li>
   <li><span class="code">filter</span>: Evaluates predicate condition (output length &lt;= input length).</li>

@@ -57,7 +57,29 @@ setInterval(() => setCount(prev => prev + 1), 1000); // Hamesha latest value!
 
 ---
 
-## 4. Array Methods & Polyfills
+## 4. Debouncing & Throttling (The Performance Protectors)
+
+### 🚪 Debouncing (Lift / Elevator Analogy)
+> *"Jab tak user continuous event trigger kar raha hai (typing), tab tak ruko! Jab user 300ms ke liye ruk jaye, tab sirf **EK BAAR** function chalao."*
+
+```javascript
+function debounce(fn, delay = 300) {
+  let timerId = null; // Closure variable
+
+  return function (...args) {
+    if (timerId) clearTimeout(timerId); // Purana timer kill karo
+
+    timerId = setTimeout(() => {
+      fn(...args);
+    }, delay);
+  };
+}
+```
+* **Kyu zaroori hai `clearTimeout`?** Agar clearTimeout nahi karenge, toh har keystroke ka timer baad me chal padega aur debouncing fail ho jayegi.
+
+---
+
+## 5. Array Methods & Polyfills
 
 ### `map` vs `filter` vs `reduce`
 - `map`: Har element ko transform karta hai (output length == input length).
