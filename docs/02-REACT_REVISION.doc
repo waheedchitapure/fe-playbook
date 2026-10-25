@@ -21,7 +21,7 @@
 
 <h1>⚛️ React.js Core Concepts & Machine Coding - Revision Notes</h1>
 <div class="callout">
-  <strong>Part 2 Master Revision Guide:</strong> React Elements, Components, JSX, State vs Props, Key prop, Controlled Forms, The 4-Guard Search Architecture, Data Fetching, and Shimmer UI.
+  <strong>Part 2 Master Revision Guide:</strong> React Elements, Components, JSX, State vs Props, Key prop, Controlled Forms, useEffect vs useLayoutEffect, The 4-Guard Search Architecture, Data Fetching, and Shimmer UI.
 </div>
 
 <h2>1. React Core Constructs</h2>
@@ -30,9 +30,6 @@
   <li><strong>React Component:</strong> A JavaScript function or class that returns React Elements and encapsulates logic.</li>
   <li><strong>React Node:</strong> Anything that can be rendered (elements, strings, numbers, arrays, null).</li>
 </ul>
-
-<h3>JSX Transpilation</h3>
-<p>Browsers do not understand JSX directly. Babel transpiles JSX into <span class="code">React.createElement()</span> calls before execution.</p>
 
 <h2>2. State vs Props & Immutability</h2>
 <table>
@@ -51,11 +48,6 @@
     <td>Mutable via setter (<span class="code">useState</span>)</td>
     <td>Read-only (immutable for child)</td>
   </tr>
-  <tr>
-    <td><strong>Re-render</strong></td>
-    <td>Updates trigger component re-render</td>
-    <td>Changes trigger re-render of child</td>
-  </tr>
 </table>
 
 <h2>3. Lists & The Key Prop</h2>
@@ -71,44 +63,48 @@
   <li><strong>The 2-List Pattern:</strong> Keep two states in search filters: <span class="code">allRestaurants</span> (master copy, never mutated) and <span class="code">filteredRestaurants</span> (display copy).</li>
 </ul>
 
-<h2>5. Production Search Bar: The 4-Guard Architecture</h2>
-<div class="callout">
-  <strong>Key Production Considerations:</strong>
-  <ol>
-    <li><strong>Debouncing:</strong> Waits for a pause (300ms) to throttle rapid typing bursts.</li>
-    <li><strong>Min-Length Guard:</strong> Only query when <span class="code">searchText.length &gt;= 3</span>.</li>
-    <li><strong>Search Caching:</strong> Cache results in an in-memory object so repeat searches execute in 0ms without network overhead.</li>
-    <li><strong>AbortController (Race Condition Prevention):</strong> Cancel stale in-flight requests when a new search string is typed.</li>
-  </ol>
-</div>
+<h2>5. useEffect vs useLayoutEffect (PDF Q11)</h2>
+<table>
+  <tr>
+    <th>Feature</th>
+    <th>useEffect</th>
+    <th>useLayoutEffect</th>
+  </tr>
+  <tr>
+    <td><strong>Timing</strong></td>
+    <td>Runs <strong>AFTER</strong> browser paint (Asynchronous)</td>
+    <td>Runs <strong>BEFORE</strong> browser paint (Synchronous)</td>
+  </tr>
+  <tr>
+    <td><strong>Blocking</strong></td>
+    <td>Does not block paint (Smooth UX)</td>
+    <td>Blocks paint until executed</td>
+  </tr>
+  <tr>
+    <td><strong>Best For</strong></td>
+    <td>Data fetching, Timers, Event Listeners</td>
+    <td>DOM measurements, Tooltip/Modal positioning (Prevents flickering)</td>
+  </tr>
+</table>
 
-<pre>useEffect(() => {
-  const controller = new AbortController();
+<h2>6. Production Search Bar: The 4-Guard Architecture</h2>
+<ol>
+  <li><strong>Debouncing:</strong> Waits for a pause (300ms) to throttle rapid typing bursts.</li>
+  <li><strong>Min-Length Guard:</strong> Only query when <span class="code">searchText.length &gt;= 3</span>.</li>
+  <li><strong>Search Caching:</strong> Cache results in an in-memory object so repeat searches execute in 0ms without network overhead.</li>
+  <li><strong>AbortController (Race Condition Prevention):</strong> Cancel stale in-flight requests when a new search string is typed.</li>
+</ol>
 
-  fetch(`/api/search?q=${searchText}`, { signal: controller.signal })
-    .then(res => res.json())
-    .then(data => setResults(data));
-
-  return () => controller.abort(); // Cleanup cancels pending request!
-}, [searchText]);</pre>
-
-<h2>6. Asynchronous Data Fetching & Shimmer UI</h2>
+<h2>7. Asynchronous Data Fetching & Shimmer UI</h2>
 <div class="callout">
   <strong>The 4-Step Mental Formula:</strong>
   <ol>
     <li><strong>3 States:</strong> <span class="code">data ([])</span>, <span class="code">isLoading (true)</span>, <span class="code">error (null)</span>.</li>
     <li><strong>useEffect:</strong> Trigger fetch inside <span class="code">useEffect(..., [])</span>.</li>
     <li><strong>Promise handling with .finally():</strong> Always set <span class="code">setIsLoading(false)</span> in <span class="code">.finally()</span>.</li>
-    <li><strong>Render Order:</strong> Check error first (<span class="code">if (error) return &lt;Error /&gt;</span>), then loading (<span class="code">if (isLoading) return &lt;Shimmer /&gt;</span>), then actual UI.</li>
+    <li><strong>Render Order:</strong> Check error first, then loading, then actual UI.</li>
   </ol>
 </div>
-
-<h2>7. Machine Coding: Star Rating Component</h2>
-<ul>
-  <li><strong>States:</strong> <span class="code">rating</span> (saved) & <span class="code">hoverRating</span> (preview).</li>
-  <li><strong>Formula:</strong> <span class="code">const isFilled = starValue &lt;= (hoverRating || rating);</span></li>
-  <li><strong>Accessibility:</strong> Include <span class="code">role="button"</span>, <span class="code">tabIndex={0}</span>, and handle <span class="code">Enter</span>/<span class="code">Space</span> in <span class="code">onKeyDown</span>.</li>
-</ul>
 
 </body>
 </html>

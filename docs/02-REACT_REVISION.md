@@ -51,7 +51,6 @@
 * Agar list items add/remove ya re-sort hote hain:
   * Index change ho jayenge!
   * React confuse ho jayega aur galat DOM nodes reuse kar lega.
-  * Form inputs ya state wale components me incorrect state preserve ho jayegi.
 * **Rule:** Hamesha unique ID use karo (e.g. `item.id`). Index sirf tab use karo agar list completely static ho.
 
 ---
@@ -63,7 +62,7 @@
 * **Uncontrolled Component:** Input value ko direct **DOM** sambhalta hai (`useRef` se read kiya jata hai).
 
 ### 🛑 The Input Freeze Trap
-* Agar `<input value={text} />` me `onChange` nahi lagaya, toh input **freeze** ho jayega! User chahe kitna bhi type kare, text change nahi hoga.
+* Agar `<input value={text} />` me `onChange` nahi lagaya, toh input **freeze** ho jayega!
 
 ### 🛡️ The 2-List Pattern in Search Filters (Namaste React Pattern)
 * Hamesha **2 States** rakho:
@@ -72,69 +71,39 @@
 
 ---
 
-## 5. Production Search Bar: The 4-Guard Architecture
+## 5. `useEffect` vs `useLayoutEffect` (PDF Q11)
 
-Jab interviewer puche ki *"Search Bar ko production level par scale kaise karoge?"*, toh yeh 4 points bolo:
+| Feature | `useEffect` | `useLayoutEffect` |
+|---|---|---|
+| **Execution Timing** | Browser ke **Paint hone ke BAAD** (Asynchronous) | DOM updates ke baad par **Paint se PEHLE** (Synchronous) |
+| **Blocking Behavior** | Screen render ko block nahi karta (Smooth UX) | Browser paint ko block karta hai |
+| **Best Used For** | Data fetching (APIs), Event listeners, Timers | DOM measurements (width/height), Tooltip/Modal positioning |
+| **Swiggy Cards** | **100% useEffect** (Taaki blank screen na dikhe) | ❌ API call ke liye kabhi use mat karo (Screen freeze hogi) |
 
-1. **Debouncing:** Fast typing bursts ko rokta hai (user ke 300ms rukne par hi call).
-2. **Minimum Length Guard:**
-   ```javascript
-   if (searchText.trim().length < 3) return; // 1-2 letters par API call block
-   ```
-3. **Search Caching (Memory Hashmap):**
-   ```javascript
-   const cache = { "pizza": [...results] };
-   // Agar word cache me hai, toh 0ms me screen par dikhao, no API call!
-   ```
-4. **Race Condition Prevention with `AbortController` (PDF Q40):**
-   ```javascript
-   useEffect(() => {
-     const controller = new AbortController();
-
-     fetch(`/api/search?q=${searchText}`, { signal: controller.signal })
-       .then(res => res.json())
-       .then(data => setResults(data));
-
-     // 🧹 Naya letter type hone par pichhli pending request cancel:
-     return () => controller.abort();
-   }, [searchText]);
-   ```
+> **Screen Flickering Fix:** Jab tooltip ya modal screen par aane se pehle jump/flicker karta hai, tab use sahi jagah bithane ke liye `useLayoutEffect` use karte hain.
 
 ---
 
-## 6. Asynchronous Data Fetching & Shimmer UI (PDF Q36 & Q40)
+## 6. Production Search Bar: The 4-Guard Architecture
+
+1. **Debouncing:** Fast typing bursts ko rokta hai (user ke 300ms rukne par hi call).
+2. **Minimum Length Guard:** `if (searchText.trim().length < 3) return;` (1-2 letters par API call block).
+3. **Search Caching (Memory Hashmap):** `cache[query]` me save rakho taaki repeat search 0ms me load ho.
+4. **Race Condition Prevention with `AbortController` (PDF Q40):** Naye keystroke aane par pending request ko `controller.abort()` se cancel karo.
+
+---
+
+## 7. Asynchronous Data Fetching & Shimmer UI (PDF Q36 & Q40)
 
 ### 4-Step Master Formula:
 1. **Teen States:** `data` (`[]`), `isLoading` (`true`), `error` (`null`).
 2. **`useEffect` with `[]`:** Sirf initial render par 1 baar call hoga.
-3. **Handle Promises with `.finally()`:**
-   ```javascript
-   fetch('/api/cards')
-     .then(res => res.json())
-     .then(data => setCards(data))
-     .catch(err => setError(err.message))
-     .finally(() => setIsLoading(false)); // 👈 Hamesha loading false karega!
-   ```
-4. **Conditional Rendering Order:**
-   * Pehle `error` check karo (`if (error) return <Error />`)
-   * Fir `isLoading` check karo (`if (isLoading) return <Shimmer />`)
-   * Fir Asli UI render karo.
+3. **Handle Promises with `.finally()`:** Hamesha `setIsLoading(false)` karo.
+4. **Conditional Rendering Order:** Pehle `error`, fir `isLoading` (Shimmer), fir Asli UI.
 
 ---
 
-## 7. Machine Coding: Star Rating Component
+## 8. Machine Coding: Star Rating & Stopwatch
 
-### Requirements & Props
-* Props: `totalStars` (default 5), `onRate(value)` callback.
-* States: `rating` (saved state), `hoverRating` (temporary preview state).
-
-### 🌟 The Golden Formula:
-```javascript
-const isFilled = starValue <= (hoverRating || rating);
-```
-* Agar mouse hover ho raha hai (`hoverRating > 0`), toh preview dikhao.
-* Agar mouse bahar chala gaya (`hoverRating === 0`), toh saved `rating` dikhao.
-
-### ♿ Accessibility Checklist
-* Har star par `role="button"` aur `tabIndex={0}` lagao.
-* Keyboard support: `Enter` ya `Space` dabane par star select ho.
+* **Star Rating Formula:** `const isFilled = starValue <= (hoverRating || rating);`
+* **Stopwatch Stale Closure Fix:** `setSeconds(prev => prev + 1);` + cleanup: `return () => clearInterval(id);`

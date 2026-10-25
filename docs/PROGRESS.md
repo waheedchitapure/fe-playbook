@@ -14,8 +14,8 @@
 
 | Week | Focus Area | Status |
 |---|---|---|
-| **Week 1** | Core JS (Execution Context, TDZ, Closures, Debounce) + Basic UI Components (Star Rating, Timer, Search Filter) | 🟡 Active (Day 1-3) |
-| **Week 2** | Controlled Forms, Memoization (`useMemo`, `useCallback`), Todo & Accordion Labs | ⚪ Upcoming |
+| **Week 1** | Core JS (Execution Context, TDZ, Closures, Debounce) + Basic UI Components (Star Rating, Timer, Search Filter) | 🟡 Active |
+| **Week 2** | Memoization (`useMemo`, `useCallback`, `React.memo`), Controlled Forms, Todo & Accordion Labs | ⚪ Upcoming |
 | **Week 3** | Async Data Fetching, Autocomplete Search (Debounce + Caching), Infinite Scroll | ⚪ Upcoming |
 | **Week 4** | Recursive Tree (Nested Comments/File Explorer), Redux/Context & Mock Drills | ⚪ Upcoming |
 
@@ -48,6 +48,7 @@
   2. Min-length guard (`length >= 3`)
   3. Search Caching (`cache[query]`)
   4. Race Condition & `AbortController` (`signal`, cleanup `controller.abort()`)
+- [x] **`useEffect` vs `useLayoutEffect`:** Timing (after paint vs before paint), non-blocking vs blocking, screen flickering fix.
 
 ### ✅ Machine Coding Labs
 - [x] **Lab 1: Star Rating Component:** Hover preview formula `isFilled = starValue <= (hoverRating || rating)`, keyboard accessibility (`Enter`/`Space`).
@@ -68,5 +69,5 @@
 ---
 
 ## 🎯 Next Immediate Action
-1. Machine Coding Lab 3: **Live Search Bar with Debounce & Caching Component**.
-2. React Core Question: `useEffect` vs `useLayoutEffect` (PDF Q11).
+1. React Performance & Memoization: `React.memo` vs `useMemo` vs `useCallback`.
+2. Machine Coding Lab 3: **Live Search Bar with Debounce & Caching Component**.
