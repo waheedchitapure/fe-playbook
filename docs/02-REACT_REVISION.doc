@@ -42,18 +42,85 @@
   "In a <strong>Controlled Component</strong>, the form input's value is driven by React state using value and onChange, making React the single source of truth. In an <strong>Uncontrolled Component</strong>, form data is handled directly by the DOM itself, and we pull values using a ref when needed."
 </div>
 
-<h2>4. Performance Optimization: The Holy Trinity (React.memo, useMemo, useCallback)</h2>
+<h2>4. useRef Hook: The Secret Spy of React (PDF Q14)</h2>
+<div class="concept-box">
+  <strong>🧠 Dimag Me Samajhne Ke Liye:</strong>
+  <span class="code">useRef</span> returns <span class="code">{ current: value }</span>. It has two jobs: (1) Direct DOM access (focus, scroll), (2) Holding a mutable value across renders <strong>WITHOUT triggering a re-render</strong> (e.g., storing <span class="code">setInterval</span> timer ID).
+</div>
+
+<h3>useState vs useRef vs Regular Variable (let)</h3>
+<table>
+  <tr>
+    <th>Feature</th>
+    <th>useState</th>
+    <th>useRef</th>
+    <th>Regular let</th>
+  </tr>
+  <tr>
+    <td><strong>Triggers Re-render?</strong></td>
+    <td><strong>YES</strong></td>
+    <td><strong>NO</strong></td>
+    <td><strong>NO</strong></td>
+  </tr>
+  <tr>
+    <td><strong>Persists across renders?</strong></td>
+    <td><strong>YES</strong></td>
+    <td><strong>YES</strong></td>
+    <td><strong>NO (wiped every render)</strong></td>
+  </tr>
+  <tr>
+    <td><strong>Best Use-Case</strong></td>
+    <td>UI data (seen on screen)</td>
+    <td>DOM nodes, Timer IDs, Previous state</td>
+    <td>Temporary local math inside function</td>
+  </tr>
+</table>
+
+<div class="script-box">
+  <strong>🗣️ Speaking Script:</strong><br>
+  "Sir, <span class="code">useRef</span> returns a mutable object <span class="code">{ current: initialValue }</span> that persists across renders. It has two primary use cases: First, to <strong>directly reference and manipulate DOM elements</strong>, like triggering focus or managing scroll positions. Second, to <strong>hold mutable values across renders without triggering a re-render</strong> when updated—such as storing timer IDs (<span class="code">setInterval</span>), tracking previous state, or maintaining instance variables."
+</div>
+
+<h2>5. Performance Optimization: The Holy Trinity (React.memo, useMemo, useCallback)</h2>
 <div class="concept-box">
   <strong>🧠 Dimag Me Samajhne Ke Liye:</strong>
   Parent re-renders cause all children to re-render. <span class="code">React.memo</span> stops child re-renders if props don't change. But because functions in JS recreate on every render (<span class="code">()=&gt;{} !== ()=&gt;{}</span>), we need <span class="code">useCallback</span> to freeze function references, and <span class="code">useMemo</span> to cache expensive calculation results.
 </div>
 
+<h3>Master Comparison Table</h3>
+<table>
+  <tr>
+    <th>Tool</th>
+    <th>What does it memoize?</th>
+    <th>Where is it used?</th>
+    <th>Purpose</th>
+  </tr>
+  <tr>
+    <td><strong>React.memo</strong></td>
+    <td>Entire <strong>Component</strong></td>
+    <td>Wraps Component definition</td>
+    <td>Prevents child re-render if props are shallowly equal</td>
+  </tr>
+  <tr>
+    <td><strong>useCallback</strong></td>
+    <td><strong>Function Definition</strong></td>
+    <td>Inside Component</td>
+    <td>Maintains stable function reference across renders</td>
+  </tr>
+  <tr>
+    <td><strong>useMemo</strong></td>
+    <td><strong>Computed Value (Result)</strong></td>
+    <td>Inside Component</td>
+    <td>Avoids running heavy calculations on every render</td>
+  </tr>
+</table>
+
 <div class="script-box">
   <strong>🗣️ Speaking Script:</strong><br>
   "Sir, these three tools optimize rendering performance at different levels:<br>
-  1. <strong>React.memo</strong> is a Higher-Order Component that memoizes an entire component's render output, skipping re-renders if its props haven't changed.<br>
-  2. <strong>useMemo</strong> is a hook that memoizes the <strong>result of an expensive computation</strong>, recalculating it only when its dependencies change.<br>
-  3. <strong>useCallback</strong> is a hook that memoizes the <strong>function definition itself</strong>, ensuring stable function references across re-renders to prevent unnecessary child re-renders."
+  1. <strong>React.memo</strong> is a Higher-Order Component that memoizes an entire component's render output, skipping re-renders if incoming props are shallowly equal.<br>
+  2. <strong>useCallback</strong> is a hook that memoizes the <strong>function definition itself</strong>, ensuring stable function references across re-renders so that memoized child components don't re-render unnecessarily.<br>
+  3. <strong>useMemo</strong> is a hook that memoizes the <strong>result of an expensive computation</strong>, recalculating it only when its specified dependencies change."
 </div>
 
 <div class="trap-box">
@@ -61,13 +128,13 @@
   <strong>Counter-Answer:</strong> "No! Over-memoization adds memory overhead and unnecessary comparison cost on every render. Memoize only when calculations are genuinely expensive or functions are passed to memoized children."
 </div>
 
-<h2>5. useEffect vs useLayoutEffect</h2>
+<h2>6. useEffect vs useLayoutEffect (PDF Q11)</h2>
 <div class="script-box">
   <strong>🗣️ Speaking Script:</strong><br>
   "Sir, both hooks handle side effects, but their execution timing is fundamentally different: useEffect runs asynchronously <strong>after</strong> the browser has painted the screen, which ensures that network calls or timers don't block the UI rendering pipeline. In contrast, useLayoutEffect runs synchronously <strong>before</strong> the browser paints. It is specifically designed for DOM measurements and styling computations to prevent visual screen flickering before the user sees the element."
 </div>
 
-<h2>6. Production Search Bar: The 4-Guard Architecture</h2>
+<h2>7. Production Search Bar: The 4-Guard Architecture</h2>
 <div class="script-box">
   <strong>🗣️ Speaking Script:</strong><br>
   "To build an enterprise production-grade search bar, I implement a 4-Guard Architecture:<br>
@@ -77,7 +144,7 @@
   4. <strong>AbortController</strong> inside useEffect cleanup to cancel stale in-flight requests and prevent race condition overwrites."
 </div>
 
-<h2>7. Asynchronous Data Fetching & Shimmer UI</h2>
+<h2>8. Asynchronous Data Fetching & Shimmer UI (PDF Q36 & Q40)</h2>
 <div class="script-box">
   <strong>🗣️ Speaking Script:</strong><br>
   "For resilient data fetching, I maintain three distinct states: data, isLoading, and error. The API call is triggered inside useEffect with an empty dependency array. I always resolve loading state using .finally(() => setIsLoading(false)) so that loading terminates cleanly on both success and rejection. In the UI, we implement Conditional Rendering: first verifying error boundaries, then presenting a Shimmer Skeleton for superior perceived performance over traditional spinners, and finally rendering the resolved card list."

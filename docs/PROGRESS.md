@@ -15,7 +15,7 @@
 | Week | Focus Area | Status |
 |---|---|---|
 | **Week 1** | Core JS (Execution Context, TDZ, Closures, Debounce) + Basic UI Components (Star Rating, Timer, Search Filter) | 🟡 Active |
-| **Week 2** | Memoization (`useMemo`, `useCallback`, `React.memo`), Controlled Forms, Todo & Accordion Labs | 🟡 In Progress |
+| **Week 2** | Memoization (`useMemo`, `useCallback`, `React.memo`), `useRef`, Controlled Forms, Todo & Accordion Labs | 🟡 In Progress |
 | **Week 3** | Async Data Fetching, Autocomplete Search (Debounce + Caching), Infinite Scroll | ⚪ Upcoming |
 | **Week 4** | Recursive Tree (Nested Comments/File Explorer), Redux/Context & Mock Drills | ⚪ Upcoming |
 
@@ -45,7 +45,11 @@
 - [x] **Asynchronous Data Fetching & Shimmer UI:** 4-step formula (`data`, `isLoading`, `error`), `.finally()` pattern.
 - [x] **4-Guard Production Search Architecture:** Debounce, Min-length guard, Search Caching, `AbortController`.
 - [x] **`useEffect` vs `useLayoutEffect`:** Timing (after paint vs before paint), non-blocking vs blocking, screen flickering fix.
-- [x] **Performance Optimization (The Holy Trinity):**
+- [x] **`useRef` Deep Dive (PDF Q14):**
+  - Direct DOM element access (focus, scroll).
+  - Mutable value persistence across renders **WITHOUT** triggering re-render.
+  - `useState` vs `useRef` vs `let` comparison matrix.
+- [x] **Performance Optimization (The Holy Trinity - PDF Q15, 16, 51, 67):**
   - `React.memo`: Component memoization against unchanged props.
   - `useCallback`: Freezing function memory reference (`() => {} !== () => {}`).
   - `useMemo`: Caching expensive computed values.
@@ -70,5 +74,5 @@
 ---
 
 ## 🎯 Next Immediate Action
-1. React Hooks Deep-Dive: `useRef` (DOM manipulation vs mutable variable without re-render - PDF Q14).
-2. Machine Coding Lab 3: **Live Autocomplete / Search Bar with Debounce & Cache**.
+1. Machine Coding Lab 3: **Live Autocomplete / Search Bar with Debounce & Cache**.
+2. Virtual DOM & Reconciliation: Fiber architecture, diffing algorithm (PDF Q46, Q47, Q48).
