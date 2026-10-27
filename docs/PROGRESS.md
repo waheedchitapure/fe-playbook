@@ -6,7 +6,7 @@
 > 1. Machine Coding components (step-by-step state design & edge cases).
 > 2. Core JS polyfills & tricky output problems (closures, event loop, prototypes).
 > 3. React architecture from the 75-questions guide (Virtual DOM, Fiber, Reconciliation, Custom Hooks, Performance).
-> Explain everything in clear, simple Hinglish (Hindi in Roman script).
+> Explain everything in clear, simple Hinglish (Hindi in Roman script). All notes must include exact Interview Speaking Scripts!
 
 ---
 
@@ -15,7 +15,7 @@
 | Week | Focus Area | Status |
 |---|---|---|
 | **Week 1** | Core JS (Execution Context, TDZ, Closures, Debounce) + Basic UI Components (Star Rating, Timer, Search Filter) | 🟡 Active |
-| **Week 2** | Memoization (`useMemo`, `useCallback`, `React.memo`), Controlled Forms, Todo & Accordion Labs | ⚪ Upcoming |
+| **Week 2** | Memoization (`useMemo`, `useCallback`, `React.memo`), Controlled Forms, Todo & Accordion Labs | 🟡 In Progress |
 | **Week 3** | Async Data Fetching, Autocomplete Search (Debounce + Caching), Infinite Scroll | ⚪ Upcoming |
 | **Week 4** | Recursive Tree (Nested Comments/File Explorer), Redux/Context & Mock Drills | ⚪ Upcoming |
 
@@ -43,12 +43,13 @@
 - [x] **Controlled Components:** `value={state}` + `onChange`, why omitting `onChange` causes freeze.
 - [x] **The 2-List Pattern in Search Filters:** Master Copy (`allRestaurants`) vs Display Copy (`filteredRestaurants`).
 - [x] **Asynchronous Data Fetching & Shimmer UI:** 4-step formula (`data`, `isLoading`, `error`), `.finally()` pattern.
-- [x] **4-Guard Production Search Architecture:**
-  1. Debounce (typing control)
-  2. Min-length guard (`length >= 3`)
-  3. Search Caching (`cache[query]`)
-  4. Race Condition & `AbortController` (`signal`, cleanup `controller.abort()`)
+- [x] **4-Guard Production Search Architecture:** Debounce, Min-length guard, Search Caching, `AbortController`.
 - [x] **`useEffect` vs `useLayoutEffect`:** Timing (after paint vs before paint), non-blocking vs blocking, screen flickering fix.
+- [x] **Performance Optimization (The Holy Trinity):**
+  - `React.memo`: Component memoization against unchanged props.
+  - `useCallback`: Freezing function memory reference (`() => {} !== () => {}`).
+  - `useMemo`: Caching expensive computed values.
+  - Over-memoization trap counter-answer.
 
 ### ✅ Machine Coding Labs
 - [x] **Lab 1: Star Rating Component:** Hover preview formula `isFilled = starValue <= (hoverRating || rating)`, keyboard accessibility (`Enter`/`Space`).
@@ -69,5 +70,5 @@
 ---
 
 ## 🎯 Next Immediate Action
-1. React Performance & Memoization: `React.memo` vs `useMemo` vs `useCallback`.
-2. Machine Coding Lab 3: **Live Search Bar with Debounce & Caching Component**.
+1. React Hooks Deep-Dive: `useRef` (DOM manipulation vs mutable variable without re-render - PDF Q14).
+2. Machine Coding Lab 3: **Live Autocomplete / Search Bar with Debounce & Cache**.

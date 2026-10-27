@@ -50,16 +50,24 @@ Browser ko HTML samajh aati hai aur JS samajh aati hai, par JSX (`<h1>{name}</h1
 
 ---
 
-## 5. The 2-List Pattern in Search Filters (Namaste React)
+## 5. Performance Optimization: The Holy Trinity (`React.memo`, `useMemo`, `useCallback`) (PDF Q15, Q16, Q51, Q67)
 
 ### 🧠 Dimag Me Samajhne Ke Liye:
-Kabhi bhi original data array ko directly filter karke overwrite mat karo, warna backspace dabane par purana data permanently gayab ho jayega!
-Hamesha **2 States** maintain karo:
-1. `allRestaurants`: Master Copy (Original data, immutable).
-2. `filteredRestaurants`: Display Copy (Jo screen par dikhti hai).
+* **Default Rule:** Jab Parent re-render hota hai, toh saare Child components by default re-render hote hain.
+* **`React.memo`:** Child ke aage guard lagata hai—agar props change nahi hue, toh Child ko re-render mat karo!
+* **The Function Trap (`() => {} !== () => {}`):** JS me har render par functions ka naya memory address banta hai, jisse `React.memo` confuse ho jata hai.
+* **`useCallback`:** Function ke **memory reference** ko freeze karta hai.
+* **`useMemo`:** Kisi heavy calculation ke **return value (result)** ko cache karta hai.
 
-### 🗣️ Speaking Script:
-> *"In search and filtering, we maintain two separate states: a Master Copy that preserves the pristine API dataset, and a Display Copy that renders on screen. When a user searches or clears their query, we always run the `.filter()` method against the Master Copy and update the Display Copy. This guarantees that original data is never lost when the user deletes or resets their search."*
+### 🗣️ Interviewer Ke Samne Kya Bolna Hai (Speaking Script):
+> *"Sir, these three tools optimize rendering performance at different levels:*
+> 1. ***`React.memo`** is a Higher-Order Component that memoizes an entire component's render output, skipping re-renders if its props haven't changed.*
+> 2. ***`useMemo`** is a hook that memoizes the **result of an expensive computation**, recalculating it only when its dependencies change.*
+> 3. ***`useCallback`** is a hook that memoizes the **function definition itself**, ensuring stable function references across re-renders to prevent unnecessary child re-renders."*
+
+### ⚠️ Critical Interview Trap: "Kya har jagah useMemo aur useCallback laga dein?"
+* **Interviewer:** *"Kya hum har function par useCallback aur har component par React.memo laga dein toh app fast ho jayegi?"*
+* **Aapka Counter-Answer:** *"Nahi Sir! Over-memoization ulta app ko slow kar sakti hai. Memoization memory consume karti hai aur har render par dependency comparison ka overhead add karti hai. Hum ise sirf tab use karte hain jab calculation sach me expensive ho, ya function kisi memoized child component ko as a prop ja raha ho."*
 
 ---
 
@@ -70,7 +78,7 @@ Hamesha **2 States** maintain karo:
 * **`useLayoutEffect`:** Screen Paint hone se **PEHLE** chalta hai (Synchronous, Blocking). Tooltip, popup ya modal ki width/height naapne ke liye use hota hai taaki screen jhatka (flicker) na mare!
 
 ### 🗣️ Speaking Script:
-> *"Sir, both hooks handle side effects, but their execution timing is fundamentally different: `useEffect` runs asynchronously **after** the browser has painted the screen, which ensures that network calls or timers don't block the UI rendering pipeline. In contrast, `useLayoutEffect` runs synchronously **before** the browser paints. It is specifically designed for DOM measurements and styling computations to prevent visual screen flickering before the user sees the element."*
+> *"Sir, both hooks handle side effects, but their execution timing is fundamentally different: `useEffect` runs asynchronously **after** the browser paints the screen, ensuring that network calls don't block the UI pipeline. In contrast, `useLayoutEffect` runs synchronously **before** the browser paints. It is specifically designed for DOM measurements and styling calculations to prevent screen flickering before the user sees the element."*
 
 ---
 

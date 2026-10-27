@@ -11,6 +11,7 @@
   p, li { margin: 4px 0; }
   .script-box { background: #f0fdf4; border-left: 4px solid #16a34a; padding: 10px 14px; margin: 10px 0; border-radius: 4px; font-style: italic; color: #14532d; }
   .concept-box { background: #eff6ff; border-left: 4px solid #0284c7; padding: 10px 14px; margin: 10px 0; border-radius: 4px; }
+  .trap-box { background: #fef2f2; border-left: 4px solid #ef4444; padding: 10px 14px; margin: 10px 0; border-radius: 4px; color: #7f1d1d; }
   .code { font-family: Consolas, 'Courier New', monospace; background: #f1f5f9; padding: 2px 6px; border-radius: 3px; font-size: 10pt; color: #0f172a; }
   pre { background: #0f172a; color: #38bdf8; font-family: Consolas, monospace; padding: 12px; border-radius: 6px; font-size: 10pt; overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; margin: 12px 0; }
@@ -41,10 +42,23 @@
   "In a <strong>Controlled Component</strong>, the form input's value is driven by React state using value and onChange, making React the single source of truth. In an <strong>Uncontrolled Component</strong>, form data is handled directly by the DOM itself, and we pull values using a ref when needed."
 </div>
 
-<h2>4. The 2-List Pattern in Search Filters</h2>
+<h2>4. Performance Optimization: The Holy Trinity (React.memo, useMemo, useCallback)</h2>
+<div class="concept-box">
+  <strong>🧠 Dimag Me Samajhne Ke Liye:</strong>
+  Parent re-renders cause all children to re-render. <span class="code">React.memo</span> stops child re-renders if props don't change. But because functions in JS recreate on every render (<span class="code">()=&gt;{} !== ()=&gt;{}</span>), we need <span class="code">useCallback</span> to freeze function references, and <span class="code">useMemo</span> to cache expensive calculation results.
+</div>
+
 <div class="script-box">
   <strong>🗣️ Speaking Script:</strong><br>
-  "In search and filtering, we maintain two separate states: a Master Copy that preserves the pristine API dataset, and a Display Copy that renders on screen. When a user searches or clears their query, we always run the .filter() method against the Master Copy and update the Display Copy. This guarantees that original data is never lost when the user deletes or resets their search."
+  "Sir, these three tools optimize rendering performance at different levels:<br>
+  1. <strong>React.memo</strong> is a Higher-Order Component that memoizes an entire component's render output, skipping re-renders if its props haven't changed.<br>
+  2. <strong>useMemo</strong> is a hook that memoizes the <strong>result of an expensive computation</strong>, recalculating it only when its dependencies change.<br>
+  3. <strong>useCallback</strong> is a hook that memoizes the <strong>function definition itself</strong>, ensuring stable function references across re-renders to prevent unnecessary child re-renders."
+</div>
+
+<div class="trap-box">
+  <strong>⚠️ Critical Trap: Should we memoize everything?</strong><br>
+  <strong>Counter-Answer:</strong> "No! Over-memoization adds memory overhead and unnecessary comparison cost on every render. Memoize only when calculations are genuinely expensive or functions are passed to memoized children."
 </div>
 
 <h2>5. useEffect vs useLayoutEffect</h2>
