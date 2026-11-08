@@ -150,5 +150,81 @@
   "For resilient data fetching, I maintain three distinct states: data, isLoading, and error. The API call is triggered inside useEffect with an empty dependency array. I always resolve loading state using .finally(() => setIsLoading(false)) so that loading terminates cleanly on both success and rejection. In the UI, we implement Conditional Rendering: first verifying error boundaries, then presenting a Shimmer Skeleton for superior perceived performance over traditional spinners, and finally rendering the resolved card list."
 </div>
 
+<h2>9. Virtual DOM, Reconciliation & Diffing Algorithm (PDF Q46, Q47, Q48)</h2>
+<div class="concept-box">
+  <strong>🧠 Dimag Me Samajhne Ke Liye:</strong><br>
+  1. <strong>Real DOM kyu slow hai?</strong> Real DOM direct chhedne par browser ko <strong>Reflow (Layout)</strong> aur <strong>Repaint</strong> karna padta hai jo sabse expensive hai.<br>
+  2. <strong>Virtual DOM:</strong> Real DOM ka lightweight JavaScript object copy jo memory me rehta hai (House ka Blueprint).<br>
+  3. <strong>Reconciliation:</strong> State/Props change hone par naya Virtual DOM banta hai. React purane aur naye VDOM ko compare karke real DOM ko sync karta hai.<br>
+  4. <strong>Diffing Heuristics:</strong> O(n^3) ko O(n) banane ke do assumptions: (a) Alag element type pura subtree destroy/recreate karta hai, (b) Lists me stable identity ke liye <span class="code">key</span> use hoti hai.
+</div>
+
+<div class="script-box">
+  <strong>🗣️ Speaking Script:</strong><br>
+  "Sir, the <strong>Virtual DOM</strong> is a lightweight in-memory JavaScript object representation of the real DOM. Manipulating the real DOM directly is expensive because it triggers browser reflow and repaint cycles.<br><br>
+  When state or props change, React generates a new Virtual DOM tree. The process of computing the difference between the previous Virtual DOM tree and the new one, and then batching only the minimal set of changes to update the real DOM, is called <strong>Reconciliation</strong>.<br><br>
+  React's <strong>Diffing Algorithm</strong> optimizes this comparison from standard O(n³) complexity down to O(n) by relying on two heuristic assumptions:<br>
+  1. Two elements of different HTML tag types will generate completely different trees, so React replaces the entire subtree.<br>
+  2. Child elements in a list are stably identified across renders using a unique <span class="code">key</span> prop."
+</div>
+
+<h2>10. The key={index} Disaster (PDF Q53)</h2>
+<div class="concept-box">
+  <strong>🧠 Dimag Me Samajhne Ke Liye:</strong><br>
+  Agar list dynamic hai (item add, delete, sort, filter ho rahe hain) aur humne <span class="code">key={index}</span> diya hai, toh jab top par naya item aayega, index shift ho jayenge. React sochega item wahi purana hai aur purane item ka input state ya checkbox naye item par transfer kar dega. UI glitch ho jayegi!<br>
+  <strong>Rule:</strong> Hamesha unique database ID (<span class="code">item.id</span>) use karo!
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Scenario</th>
+      <th>Kya key={index} chalega?</th>
+      <th>Reason</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Static List</strong> (e.g. Nav items jo kabhi reorder/filter nahi hote)</td>
+      <td>✅ <strong>SAFE</strong></td>
+      <td>List ka order aur count kabhi badalta nahi hai</td>
+    </tr>
+    <tr>
+      <td><strong>Dynamic List</strong> (Add, Delete, Filter, Sort)</td>
+      <td>❌ <strong>CRITICAL BUG</strong></td>
+      <td>Index shift hote hi component state cross-wire ho jati hai</td>
+    </tr>
+    <tr>
+      <td><strong>List with Inputs / Checkboxes</strong></td>
+      <td>❌ <strong>CRITICAL BUG</strong></td>
+      <td>Uncontrolled state galat item ko bind ho jati hai</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="script-box">
+  <strong>🗣️ Speaking Script:</strong><br>
+  "Sir, using array index as a key is an anti-pattern when the list is dynamic. React uses keys to track the identity of elements across renders. If an item is inserted, deleted, or sorted, the indices shift. React then matches components based on positional index rather than true data identity, leading to severe bugs such as mismatched input states, corrupted checkboxes, broken animations, and redundant re-renders. We should strictly use unique, stable identifiers from data like <span class="code">item.id</span>."
+</div>
+
+<h2>11. React Fiber Architecture: React 15 vs React 16+ (PDF Q54, Q55)</h2>
+<div class="concept-box">
+  <strong>🧠 Dimag Me Samajhne Ke Liye:</strong><br>
+  1. <strong>React 15 (Stack Reconciler):</strong> Synchronous aur recursive tha. Bada tree render karte waqt browser main thread block ho jata tha, frames drop (lag) hote the.<br>
+  2. <strong>React 16 (Fiber Reconciler):</strong> Complete rewrite. Rendering ko chhote-chhote units ("Fibers") me todta hai.<br>
+  3. <strong>Superpowers:</strong> <strong>Incremental Rendering (Time Slicing)</strong> - render ko pause karke user interaction handle kar sakta hai, fir resume karta hai. <strong>Priority Scheduling</strong> - user typing/clicking ko background data rendering se pehle run karta hai.<br>
+  4. <strong>2 Phases:</strong> <em>Render Phase</em> (Asynchronous, interruptible, calculates diffs) aur <em>Commit Phase</em> (Synchronous, fast, flushes updates to Real DOM).
+</div>
+
+<div class="script-box">
+  <strong>🗣️ Speaking Script:</strong><br>
+  "Sir, <strong>React Fiber</strong> is the complete rewrite of React's reconciliation engine introduced in React 16 to solve the limitations of the older Stack Reconciler.<br><br>
+  In React 15's Stack Reconciler, rendering was synchronous and recursive, holding the main thread hostage and causing dropped frames (jank).<br><br>
+  Fiber introduced two revolutionary capabilities:<br>
+  1. <strong>Incremental Rendering (Time Slicing):</strong> It breaks render work into small units called 'Fibers' that can be paused, resumed, or aborted based on browser idle deadlines.<br>
+  2. <strong>Priority-Based Scheduling:</strong> High-priority user interactions (typing, clicking) take precedence over low-priority background updates (off-screen rendering).<br><br>
+  Fiber operates in two distinct phases: The <strong>Render Phase</strong> (asynchronous, interruptible diff calculation) and The <strong>Commit Phase</strong> (synchronous, uninterruptible DOM mutation)."
+</div>
+
 </body>
 </html>

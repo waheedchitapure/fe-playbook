@@ -54,6 +54,17 @@
   - `useCallback`: Freezing function memory reference (`() => {} !== () => {}`).
   - `useMemo`: Caching expensive computed values.
   - Over-memoization trap counter-answer.
+- [x] **Virtual DOM, Reconciliation & Diffing Algorithm (PDF Q46, Q47, Q48):**
+  - Real DOM reflow/repaint performance costs vs in-memory JS Object tree.
+  - The House Blueprint analogy.
+  - Diffing algorithm: $O(n^3)$ to $O(n)$ heuristic optimizations (element type replacement & stable keys).
+- [x] **The `key={index}` Disaster (PDF Q53):**
+  - Index shifting during dynamic list mutations causing component state mix-ups.
+  - Exact matrix: When is `key={index}` safe vs when does it trigger critical UI bugs.
+- [x] **React Fiber Architecture: React 15 vs 16+ (PDF Q54, Q55):**
+  - Stack Reconciler (synchronous/blocking) vs Fiber Reconciler (cooperative multitasking).
+  - Incremental rendering, time slicing, priority-based scheduling.
+  - Two Phases: Render Phase (asynchronous/interruptible) vs Commit Phase (synchronous/uninterruptible).
 
 ### ✅ Machine Coding Labs
 - [x] **Lab 1: Star Rating Component:** Hover preview formula `isFilled = starValue <= (hoverRating || rating)`, keyboard accessibility (`Enter`/`Space`).
@@ -75,4 +86,4 @@
 
 ## 🎯 Next Immediate Action
 1. Machine Coding Lab 3: **Live Autocomplete / Search Bar with Debounce & Cache**.
-2. Virtual DOM & Reconciliation: Fiber architecture, diffing algorithm (PDF Q46, Q47, Q48).
+2. Custom Hooks: Deep dive into building custom hooks (`useFetch`, `useOnlineStatus`).
